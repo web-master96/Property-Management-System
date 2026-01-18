@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Query
 
 router = APIRouter()
 
-VERIFY_TOKEN = "my_secret_token"
+VERIFY_TOKEN = "BriFav4ever"
 
 @router.get("/webhook")
 def verify_webhook(
