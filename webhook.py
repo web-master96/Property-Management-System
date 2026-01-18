@@ -22,3 +22,28 @@ async def receive_message(request: Request):
     data = await request.json()
     print("WhatsApp says:", data)
     return {"status": "ok"}
+
+
+from fastapi import APIRouter, Request
+
+router = APIRouter()
+
+@router.get("/webhook")
+def verify_webhook(
+    hub_mode: str = None,
+    hub_challenge: str = None,
+    hub_verify_token: str = None,
+):
+    VERIFY_TOKEN = "my_secret_token"
+
+    if hub_mode == "subscribe" and hub_verify_token == VERIFY_TOKEN:
+        return int(hub_challenge)
+
+    return {"error": "Verification failed"}
+
+
+@router.post("/webhook")
+async def receive_message(request: Request):
+    data = await request.json()
+    print("Incoming message:", data)
+    return {"status": "received"}
