@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Request, Query
+from fastapi import APIRouter, Request, Query, Response
 
 router = APIRouter()
 
-VERIFY_TOKEN = "BriFav4ever"
+VERIFY_TOKEN = "my_secret_token"
 
 @router.get("/webhook")
 def verify_webhook(
@@ -11,9 +11,9 @@ def verify_webhook(
     hub_verify_token: str = Query(None, alias="hub.verify_token"),
 ):
     if hub_mode == "subscribe" and hub_verify_token == VERIFY_TOKEN:
-        return int(hub_challenge)
+        return Response(content=hub_challenge, media_type="text/plain")
 
-    return {"error": "Verification failed"}
+    return Response(content="Verification failed", status_code=403)
 
 
 @router.post("/webhook")
