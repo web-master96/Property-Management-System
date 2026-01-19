@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Request, Query, Response
 
-router = APIRouter()
+router = APIRouter(prefix="/webhook")
 
 VERIFY_TOKEN = "my_secret_token"
 
-@router.get("/webhook")
+@router.get("")
 def verify_webhook(
     hub_mode: str = Query(None, alias="hub.mode"),
     hub_challenge: str = Query(None, alias="hub.challenge"),
@@ -16,7 +16,7 @@ def verify_webhook(
     return Response(content="Verification failed", status_code=403)
 
 
-@router.post("/webhook")
+@router.post("")
 async def receive_message(request: Request):
     data = await request.json()
     print("Incoming message:", data)
